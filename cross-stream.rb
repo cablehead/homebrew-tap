@@ -1,1 +1,0 @@
-Formula/cross-stream.rb
