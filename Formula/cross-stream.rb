@@ -10,6 +10,10 @@ class CrossStream < Formula
     bin.install "xs"
   end
 
+  service do
+    run [opt_bin/"xs", "serve", File.join(Dir.home, ".local/share/cross.stream/store")]
+  end
+
   test do
     system "#{bin}/xs", "--version"
   end
