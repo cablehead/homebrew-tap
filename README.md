@@ -1,11 +1,9 @@
-# homebrew-tap
-
 A small collection of Homebrew “taps” maintained by cablehead.
 
 ## Available Taps
 
-- **cross-stream**: An event stream store for personal, local-first use, specializing in event sourcing.  
-- **x-macos-pasteboard**: A command-line tool to interact with the macOS pasteboard.
+- [**cross-stream**](https://github.com/cablehead/xs): An event stream store for personal, local-first use, specializing in event sourcing.  
+- [**x-macos-pasteboard**](https://github.com/cablehead/x-macos-pasteboard): A command-line tool to interact with the macOS pasteboard.
 
 ## Usage
 
