@@ -1,10 +1,10 @@
 class CrossStream < Formula
   desc "An event stream store for personal, local-first use, specializing in event sourcing."
   homepage "https://github.com/cablehead/xs"
-  url "https://github.com/cablehead/xs/releases/download/v0.6.2/cross-stream-v0.6.2-macos.tar.gz"
-  sha256 "8c81c91897699f46260cdaa915758a6590d1a8966a4b6eb31bf00fc49d0b163e"
+  url "https://github.com/cablehead/xs/releases/download/v0.6.3/cross-stream-v0.6.3-macos.tar.gz"
+  sha256 "ac245cbed59aa92c982856b29e88c901fcd98baeb03ffd064b7d2be5fdab5d1b"
   license "MIT"
-  version "0.6.2"
+  version "0.6.3"
 
   def install
     bin.install "xs"
