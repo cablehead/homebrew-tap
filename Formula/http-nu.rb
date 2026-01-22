@@ -1,13 +1,13 @@
 class HttpNu < Formula
   desc "The surprisingly performant, Datastar-ready, Nushell-scriptable HTTP server that fits in your back pocket"
   homepage "https://github.com/cablehead/http-nu"
-  url "https://github.com/cablehead/http-nu/releases/download/v0.10.0/http-nu-darwin-arm64.tar.gz"
-  sha256 "d7ee427d1eea3679d10a2dc9aff6337d2f21edcec0101821f47e64fa692e21eb"
+  url "https://github.com/cablehead/http-nu/releases/download/v0.10.1/http-nu-v0.10.1-darwin-arm64.tar.gz"
+  sha256 "45e8d26cdb84b901c3a6440f757080972f518976e2b2ec8761a75dc39e3f675c"
   license "MIT"
-  version "0.10.0"
+  version "0.10.1"
 
   def install
-    bin.install "http-nu"
+    bin.install "http-nu-v0.10.1/http-nu"
   end
 
   test do
