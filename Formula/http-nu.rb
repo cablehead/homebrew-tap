@@ -7,7 +7,7 @@ class HttpNu < Formula
   version "0.10.1"
 
   def install
-    bin.install "http-nu-v0.10.1/http-nu"
+    bin.install "http-nu"
   end
 
   test do
