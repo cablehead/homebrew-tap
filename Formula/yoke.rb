@@ -1,10 +1,10 @@
 class Yoke < Formula
   desc "Headless agent harness. JSONL in, JSONL out."
   homepage "https://github.com/cablehead/yoke"
-  url "https://github.com/cablehead/yoke/releases/download/v0.2.1/yoke-v0.2.1-darwin-arm64.tar.gz"
-  sha256 "8772b122d8075843262c7ef65071cf2636fddc702b7918990fa1cb5cd6c6ae0d"
+  url "https://github.com/cablehead/yoke/releases/download/v0.2.2/yoke-v0.2.2-darwin-arm64.tar.gz"
+  sha256 "788871140ce3c08d332f6b60bf8508ee67e13d7e43ec5c2fa9621576be1379be"
   license "MIT"
-  version "0.2.1"
+  version "0.2.2"
 
   def install
     bin.install "yoke"
