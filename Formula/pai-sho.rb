@@ -10,15 +10,15 @@ class PaiSho < Formula
     bin.install "pai-sho"
 
     # Supervised-launch wrapper. Run as root (see the service block) so it can
-    # point macOS at the owned resolver for the `.ps.internal` domain, then exec the
+    # point macOS at the owned resolver for the `.pai-sho` domain, then exec the
     # daemon serving that resolver. macOS reads /etc/resolver/<domain> for
-    # per-domain nameservers, so this touches only `.ps.internal`, never the global
+    # per-domain nameservers, so this touches only `.pai-sho`, never the global
     # resolver.
     (libexec/"pai-sho-serve").write <<~SH
       #!/bin/sh
       set -e
       mkdir -p /etc/resolver
-      printf 'nameserver 127.0.0.1\\nport 5353\\n' > /etc/resolver/ps.internal
+      printf 'nameserver 127.0.0.1\\nport 5353\\n' > /etc/resolver/pai-sho
       exec "#{opt_bin}/pai-sho" daemon --resolver 127.0.0.1:5353
     SH
     chmod 0755, libexec/"pai-sho-serve"
@@ -34,12 +34,12 @@ class PaiSho < Formula
 
   def caveats
     <<~EOS
-      Start the supervised operator daemon (needs root to wire `.ps.internal`):
+      Start the supervised operator daemon (needs root to wire `.pai-sho`):
         sudo brew services start cablehead/tap/pai-sho
 
       This runs `pai-sho daemon --resolver 127.0.0.1:5353` and writes
-      /etc/resolver/ps.internal so `<peer>.ps.internal` (e.g. vibenv-ndyg.ps.internal) resolves through
-      the daemon's owned resolver. Only the `.ps.internal` domain is routed there; the
+      /etc/resolver/pai-sho so `<peer>.pai-sho` (e.g. vibenv-ndyg.pai-sho) resolves through
+      the daemon's owned resolver. Only the `.pai-sho` domain is routed there; the
       system resolver is left untouched. Stop it with:
         sudo brew services stop cablehead/tap/pai-sho
 
