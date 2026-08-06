@@ -10,16 +10,17 @@ class PaiSho < Formula
     bin.install "pai-sho"
 
     # Supervised-launch wrapper. Run as root (see the service block) so it can
-    # point macOS at the owned resolver for the `.pai-sho` domain, then exec the
-    # daemon serving that resolver. macOS reads /etc/resolver/<domain> for
-    # per-domain nameservers, so this touches only `.pai-sho`, never the global
-    # resolver.
+    # create the utun and point macOS at the owned resolver for the `.pai-sho`
+    # domain, then exec the daemon. The TUN backend serves the resolver in-stack
+    # on 10.99.0.53:53, so /etc/resolver/pai-sho points there (no port). macOS
+    # reads /etc/resolver/<domain> for per-domain nameservers, so this touches
+    # only `.pai-sho`, never the global resolver. Verified on macOS 26.4.1.
     (libexec/"pai-sho-serve").write <<~SH
       #!/bin/sh
       set -e
       mkdir -p /etc/resolver
-      printf 'nameserver 127.0.0.1\\nport 5353\\n' > /etc/resolver/pai-sho
-      exec "#{opt_bin}/pai-sho" daemon --resolver 127.0.0.1:5353
+      printf 'nameserver 10.99.0.53\\n' > /etc/resolver/pai-sho
+      exec "#{opt_bin}/pai-sho" daemon --tun utun
     SH
     chmod 0755, libexec/"pai-sho-serve"
   end
@@ -37,14 +38,15 @@ class PaiSho < Formula
       Start the supervised operator daemon (needs root to wire `.pai-sho`):
         sudo brew services start cablehead/tap/pai-sho
 
-      This runs `pai-sho daemon --resolver 127.0.0.1:5353` and writes
-      /etc/resolver/pai-sho so `<peer>.pai-sho` (e.g. vibenv-ndyg.pai-sho) resolves through
-      the daemon's owned resolver. Only the `.pai-sho` domain is routed there; the
-      system resolver is left untouched. Stop it with:
+      This runs `pai-sho daemon --tun utun` (creates a utun owned-network with the
+      resolver in-stack on 10.99.0.53:53) and writes /etc/resolver/pai-sho so
+      `<peer>.pai-sho` (e.g. vibenv-ndyg.pai-sho) resolves through it. Only the
+      `.pai-sho` domain is routed there; the system resolver is left untouched.
+      Stop it with:
         sudo brew services stop cablehead/tap/pai-sho
 
-      The resolver flag requires a release that includes surfaces/auto-project
-      (cablehead/pai-sho#4); bump url/sha256/version to that release.
+      Requires a release that includes the TUN backend (cablehead/pai-sho#4);
+      bump url/sha256/version to that release.
     EOS
   end
 
