@@ -1,16 +1,18 @@
 class PaiSho < Formula
   desc "Peer-to-peer TCP port forwarding over iroh"
   homepage "https://github.com/cablehead/pai-sho"
-  url "https://github.com/cablehead/pai-sho/releases/download/v0.4.0/pai-sho-v0.4.0-macos-arm64.tar.gz"
-  sha256 "4290f9038925ada451dc47f3c90fb60a13d76e0982fec1da33e6693b660361a5"
+  url "https://github.com/cablehead/pai-sho/releases/download/v0.4.1/pai-sho-v0.4.1-macos-arm64.tar.gz"
+  sha256 "643929f1665a1d2e2d03552c41b95e7b06d2ab90f85ab8a502f894ad0e17c632"
   license "MIT"
 
   def install
     bin.install "pai-sho"
 
     # Supervised operator launch. Runs as root (creating a utun and editing
-    # /etc/resolver both need it), brings up the private network, then hands the
-    # control socket to the console user so the CLI needs no sudo.
+    # /etc/resolver both need it), brings up the private network, and hands the
+    # control socket to the logged-in user so the CLI needs no sudo. pai-sho
+    # chowns the socket itself (after bind, before accept) via --socket-owner,
+    # so there is no poll and no race; exec lets launchd supervise it directly.
     (libexec/"pai-sho-operator").write <<~SH
       #!/bin/bash
       set -e
@@ -19,18 +21,11 @@ class PaiSho < Formula
       printf 'nameserver 10.99.0.53\\n' > /etc/resolver/pai-sho
 
       KEY="#{var}/pai-sho/op.key"   # persistent: the operator ticket is stable across restarts
-      SOCK="/tmp/pai-sho.sock"      # the CLI default, so `pai-sho <cmd>` needs no --socket
       mkdir -p "$(dirname "$KEY")"
 
-      "#{opt_bin}/pai-sho" --socket "$SOCK" daemon --key "$KEY" --tun utun &
-      daemon=$!
-
-      # once the daemon has created the socket, give it to whoever is logged in
-      for _ in $(seq 1 100); do [ -S "$SOCK" ] && break; sleep 0.1; done
-      u=$(stat -f%Su /dev/console 2>/dev/null || true)
-      [ -n "$u" ] && [ "$u" != root ] && chown "$u" "$SOCK" 2>/dev/null || true
-
-      wait "$daemon"
+      u=$(stat -f%Su /dev/console)  # the logged-in user
+      exec "#{opt_bin}/pai-sho" --socket /tmp/pai-sho.sock daemon \\
+        --key "$KEY" --tun utun --socket-owner "$u"
     SH
     (libexec/"pai-sho-operator").chmod 0755
   end
