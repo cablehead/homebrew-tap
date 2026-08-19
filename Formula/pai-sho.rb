@@ -1,8 +1,8 @@
 class PaiSho < Formula
   desc "Peer-to-peer TCP port forwarding over iroh"
   homepage "https://github.com/cablehead/pai-sho"
-  url "https://github.com/cablehead/pai-sho/releases/download/v0.4.1/pai-sho-v0.4.1-macos-arm64.tar.gz"
-  sha256 "643929f1665a1d2e2d03552c41b95e7b06d2ab90f85ab8a502f894ad0e17c632"
+  url "https://github.com/cablehead/pai-sho/releases/download/v0.5.0/pai-sho-v0.5.0-macos-arm64.tar.gz"
+  sha256 "a3cd0c533c1b26a74b5ca9d6c62b80aaba0c4cc931b6144d1ff93e691231fe22"
   license "MIT"
 
   def install
@@ -20,7 +20,7 @@ class PaiSho < Formula
       mkdir -p /etc/resolver
       printf 'nameserver 10.99.0.53\\n' > /etc/resolver/pai-sho
 
-      KEY="#{var}/pai-sho/op.key"   # persistent: the operator ticket is stable across restarts
+      KEY="#{var}/pai-sho/op.key"   # persistent: the operator key is stable across restarts
       mkdir -p "$(dirname "$KEY")"
 
       u=$(stat -f%Su /dev/console)  # the logged-in user
@@ -48,11 +48,11 @@ class PaiSho < Formula
 
       Then drive it without sudo (the socket is chowned to the logged-in user):
 
-        pai-sho ticket
-        pai-sho grant-token --label <name>
+        pai-sho key
+        pai-sho invite --as <name>
 
-      The operator key persists at #{var}/pai-sho/op.key, so its ticket is
-      stable across restarts.
+      The operator key persists at #{var}/pai-sho/op.key, so it is stable
+      across restarts and a workload can be given it ahead of time.
     EOS
   end
 
