@@ -1,8 +1,8 @@
 class PaiSho < Formula
   desc "Peer-to-peer TCP port forwarding over iroh"
   homepage "https://github.com/cablehead/pai-sho"
-  url "https://github.com/cablehead/pai-sho/releases/download/v0.5.2/pai-sho-v0.5.2-macos-arm64.tar.gz"
-  sha256 "cf1ba2200bb3eb203c158e788a29a814f113dfa61e8bc8a0374d340c499a1ac4"
+  url "https://github.com/cablehead/pai-sho/releases/download/v0.5.3/pai-sho-v0.5.3-macos-arm64.tar.gz"
+  sha256 "718d30d261270a3afd6eff1dfadba6dbaa1583a7bce06287a058becc881a0f46"
   license "MIT"
 
   def install
